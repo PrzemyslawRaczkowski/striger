@@ -1,9 +1,7 @@
 package com.raczkowski.apps.view;
 
-public class View {
+public interface View {
 
-    public void print() {
-
-    }
+    void view();
 
 }

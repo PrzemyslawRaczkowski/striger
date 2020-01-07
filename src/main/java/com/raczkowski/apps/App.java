@@ -10,7 +10,7 @@ public class App {
     }
 
     private void run() {
-        new RootController(new ArticlesController(), new UsersController())
+        new RootController(new ArticlesController(), new UsersController(), view)
                 .handle();
     }
 }
