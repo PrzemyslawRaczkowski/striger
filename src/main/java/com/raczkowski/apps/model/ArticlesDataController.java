@@ -5,20 +5,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ArticlesDataController {
-    public ArrayList<Articles> dataReader() {
-        ArrayList<Articles> listOfReadedArticles = new ArrayList<>();
+    final private File file = new File("Articles.csv");
+
+    public ArrayList<Articles> articlesReader() {
+        ArrayList<Articles> listOfReadArticles = new ArrayList<>();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("Articles.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] attributes = line.split(",");
                 Articles article = createArticle(attributes);
-                listOfReadedArticles.add(article);
+                listOfReadArticles.add(article);
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return listOfReadedArticles;
+        return listOfReadArticles;
     }
 
     private static Articles createArticle(String[] metadata) {
@@ -31,27 +33,27 @@ public class ArticlesDataController {
     }
 
 
-    public void dataWriter(ArrayList<Articles> articlesList) {
+    public void articlesWriter(ArrayList<Articles> articlesList) {
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Articles.csv"), "UTF-8"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             for (Articles articles : articlesList) {
-                StringBuffer oneLine = new StringBuffer();
-                oneLine.append(articles.getId());
                 String CSV_SEPARATOR = ",";
-                oneLine.append(CSV_SEPARATOR);
-                oneLine.append(articles.getTitle());
-                oneLine.append(CSV_SEPARATOR);
-                oneLine.append(articles.getContent());
-                oneLine.append(CSV_SEPARATOR);
-                oneLine.append(articles.getAuthor());
-                oneLine.append(CSV_SEPARATOR);
-                oneLine.append(articles.getLocalDate());
-                bw.write(oneLine.toString());
+                String oneLine = (articles.getId() +
+                        CSV_SEPARATOR +
+                        articles.getTitle() +
+                        CSV_SEPARATOR +
+                        articles.getContent() +
+                        CSV_SEPARATOR +
+                        articles.getAuthor() +
+                        CSV_SEPARATOR +
+                        articles.getLocalDate());
+                bw.write(oneLine);
                 bw.newLine();
             }
             bw.flush();
             bw.close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

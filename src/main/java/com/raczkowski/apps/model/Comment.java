@@ -45,13 +45,13 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", idOfArticle=" + idOfArticle +
-                ", idOfUser=" + idOfUser +
-                ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
-                ", localDate=" + localDate +
-                '}';
+        return "Comment{ " +
+                " id =" + id +
+                ", idOfArticle = " + idOfArticle +
+                ", idOfUser = " + idOfUser +
+                ", content = " + content +
+                ", author = " + author +
+                ", localDate = " + localDate +
+                '}'+'\n';
     }
 }

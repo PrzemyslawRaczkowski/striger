@@ -7,17 +7,20 @@ import com.raczkowski.apps.controller.UsersController;
 import com.raczkowski.apps.model.Articles;
 import com.raczkowski.apps.view.View;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class App {
     public static void main(String[] args) {
         new App().run();
-        ArticlesController articlesController = new ArticlesController();
-        articlesController.handle();
-        CommentsController commentsController=new CommentsController();
-        commentsController.handle();
-        UsersController usersController=new UsersController();
-        usersController.handle();
+        //ArticlesController articlesController = new ArticlesController();
+        //articlesController.handle();
+        //CommentsController commentsController=new CommentsController();
+       // commentsController.handle();
+        //UsersController usersController=new UsersController();
+        //usersController.handle();
+
     }
 
     private void run() {

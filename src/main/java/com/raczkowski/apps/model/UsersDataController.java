@@ -1,10 +1,11 @@
 package com.raczkowski.apps.model;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UsersDataController {
+    final private File file = new File("Users.csv");
+
     public ArrayList<Users> usersReader() {
         ArrayList<Users> listOfReadedUsers = new ArrayList<>();
         try {
@@ -24,24 +25,27 @@ public class UsersDataController {
     private static Users createUser(String[] metadata) {
         int id = Integer.parseInt(metadata[0]);
         String name = metadata[1];
-        return new Users(id, name);
+        String lastName = metadata[2];
+        return new Users(id, name, lastName);
     }
 
     public void userWriter(ArrayList<Users> UsersList) {
         try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Users.csv"), "UTF-8"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             for (Users user : UsersList) {
-                StringBuffer oneLine = new StringBuffer();
-                oneLine.append(user.getId());
                 String CSV_SEPARATOR = ",";
-                oneLine.append(CSV_SEPARATOR);
-                oneLine.append(user.getName());
-                bw.write(oneLine.toString());
+                String oneLine = (user.getId() +
+                        CSV_SEPARATOR +
+                        user.getName()
+                        + CSV_SEPARATOR
+                        + user.getLastName());
+                bw.write(oneLine);
                 bw.newLine();
             }
             bw.flush();
             bw.close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
