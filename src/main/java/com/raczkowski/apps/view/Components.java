@@ -12,6 +12,8 @@ public class Components implements View {
 
     @Override
     public void view() {
-        
+        for (String component : components) {
+            System.out.println(component);
+        }
     }
 }

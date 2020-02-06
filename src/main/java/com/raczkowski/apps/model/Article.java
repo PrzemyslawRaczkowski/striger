@@ -1,23 +1,21 @@
 package com.raczkowski.apps.model;
 
-import java.io.*;
 import java.time.LocalDate;
 
-public class Articles extends NotSerializableException {
+public class Article {
     private int id;
     private String title;
     private String content;
     private String author;
     private LocalDate localDate;
 
-    public Articles(int id, String title, String content, String author, LocalDate localDate) {
+    public Article(int id, String title, String content, String author, LocalDate localDate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
         this.localDate = localDate;
     }
-
 
     public int getId() {
         return id;

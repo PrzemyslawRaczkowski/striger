@@ -10,7 +10,7 @@ public class Menu implements View {
 
     @Override
     public void view() {
-
+        components.view();
     }
 
 
