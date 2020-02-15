@@ -14,7 +14,6 @@ public class ArticlesCreator {
         String content = scanner.nextLine();
         System.out.println("Podaj swoje Imię i Nazwisko: ");
         String author = scanner.nextLine();
-
         return new Article(0, title, content, author, LocalDate.now());
     }
 }

@@ -5,29 +5,50 @@ import com.raczkowski.apps.model.Article;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArticlesFileRepository implements ArticlesRepository {
     final private File file = new File("Articles.csv");
+    final private String CSV_SEPARATOR = ",";
 
     @Override
     public void addArticle(Article article) {
-
+        addSingleArticle(article);
     }
 
     @Override
-    public void addArticles(List<Article> articles) {
-
+    public void addArticles(ArrayList<Article> articles) {
+        articlesWriter(articles);
     }
 
     @Override
-    public void loadArticles() {
-
+    public ArrayList<Article> loadArticles() {
+        return articlesReader();
     }
 
     @Override
-    public void loadArticleById(int id) {
+    public Article loadArticleById(int id) {
+        return articlesReader().get(id);
+    }
 
+    private void addSingleArticle (Article article) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+                String oneLine = (articlesReader().size() +
+                        CSV_SEPARATOR +
+                        article.getTitle() +
+                        CSV_SEPARATOR +
+                        article.getContent() +
+                        CSV_SEPARATOR +
+                        article.getAuthor() +
+                        CSV_SEPARATOR +
+                        article.getLocalDate());
+                bw.write(oneLine);
+                bw.newLine();
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private ArrayList<Article> articlesReader() {
@@ -60,7 +81,6 @@ public class ArticlesFileRepository implements ArticlesRepository {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             for (Article articles : articlesList) {
-                String CSV_SEPARATOR = ",";
                 String oneLine = (articles.getId() +
                         CSV_SEPARATOR +
                         articles.getTitle() +

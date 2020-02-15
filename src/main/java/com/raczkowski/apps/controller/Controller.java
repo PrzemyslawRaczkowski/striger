@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface Controller {
 
-    void handle() throws IOException, ClassNotFoundException;
+    void handle();
 
 }

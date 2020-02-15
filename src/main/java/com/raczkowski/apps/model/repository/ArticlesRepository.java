@@ -2,16 +2,16 @@ package com.raczkowski.apps.model.repository;
 
 import com.raczkowski.apps.model.Article;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface ArticlesRepository {
 
     void addArticle(Article article);
 
-    void addArticles(List<Article> articles);
+    void addArticles(ArrayList<Article> articles);
 
-    void loadArticles();
+    ArrayList<Article> loadArticles();
 
-    void loadArticleById(int id);
+    Article loadArticleById(int id);
 
 }

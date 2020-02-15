@@ -5,6 +5,7 @@ import com.raczkowski.apps.controller.CommentsController;
 import com.raczkowski.apps.controller.RootController;
 import com.raczkowski.apps.controller.UsersController;
 import com.raczkowski.apps.model.ArticlesCreator;
+import com.raczkowski.apps.model.ArticlesStatistics;
 import com.raczkowski.apps.model.repository.ArticlesFileRepository;
 import com.raczkowski.apps.view.Components;
 import com.raczkowski.apps.view.Menu;
@@ -16,7 +17,7 @@ import static java.util.Arrays.asList;
 public class App {
 
     private final List<String> rootMenuComponents = asList(
-            "1. Show articles.",
+            "1. Open articles menager.",
             "2. Show comments.",
             "3. Show users.",
             "4. Q - for quit");
@@ -28,7 +29,7 @@ public class App {
             "4. Show articles in time range.",
             "5. Show articles for author.",
             "6. Get longest article.",
-            "3. B - for back");
+            "7. B - for back");
 
     public static void main(String[] args) {
         new App().run();
@@ -39,7 +40,8 @@ public class App {
                 new ArticlesController(
                         new ArticlesFileRepository(),
                         new ArticlesCreator(),
-                        new Menu(
+                        new ArticlesStatistics()
+                        , new Menu(
                                 new Components(articlesMenuComponents)
                         )),
                 new UsersController(),
