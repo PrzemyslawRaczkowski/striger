@@ -20,7 +20,7 @@ public class App {
             "1. Open articles menager.",
             "2. Show comments.",
             "3. Show users.",
-            "4. Q - for quit");
+            " Q - for quit");
 
     private final List<String> articlesMenuComponents = asList(
             "1. Show articles.",
@@ -29,7 +29,8 @@ public class App {
             "4. Show articles in time range.",
             "5. Show articles for author.",
             "6. Get longest article.",
-            "7. B - for back");
+            "7. Filter articles.",
+            " B - for back");
 
     public static void main(String[] args) {
         new App().run();

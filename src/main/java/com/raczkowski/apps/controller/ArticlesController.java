@@ -6,6 +6,7 @@ import com.raczkowski.apps.model.ArticlesStatistics;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
 import com.raczkowski.apps.view.View;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.System.in;
@@ -35,7 +36,7 @@ public class ArticlesController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    articlesRepository.loadArticles();
+                    System.out.println(articlesRepository.loadArticles());
                     break;
                 case "2":
                     articlesRepository.addArticle(articlesCreator.create());
@@ -44,16 +45,16 @@ public class ArticlesController implements Controller {
                     System.out.println(articlesStatistics.articlesFromToday());
                     break;
                 case "4":
-                    String userChoice1 = handleInput();
-                    String userChoice2 = handleInput();
-                    System.out.println(articlesStatistics.articlesFromRange(userChoice1,userChoice2));
+                    System.out.println(articlesStatistics.articlesFromRange(rangeMenu()));
                     break;
                 case "5":
-                    String choice1 = handleInput();
-                    System.out.println(articlesStatistics.articlesOfAuthor(choice1));
+                    System.out.println(articlesStatistics.articlesOfAuthor(authorMenu()));
                     break;
                 case "6":
                     System.out.println(articlesStatistics.articlesOfLongestContext());
+                    break;
+                case "7":
+                    System.out.println(articlesStatistics.articlesFiler(sortMenu()));
                     break;
                 case "B":
                     run = false;
@@ -63,6 +64,31 @@ public class ArticlesController implements Controller {
             }
         }
     }
+
+    private String sortMenu() {
+        System.out.println("How do you want to sort ?");
+        System.out.println("1. Ascending.");
+        System.out.println("2. Descending.");
+        return handleInput();
+    }
+
+    private String authorMenu() {
+        System.out.println("Insert author: ");
+        return new Scanner(in).nextLine();
+    }
+
+    private ArrayList<Integer> rangeMenu() {
+        System.out.println("Insert range of months.");
+        System.out.println("First month: ");
+        int scanner = new Scanner(in).nextInt();
+        System.out.println("Last month: ");
+        int scanner1 = new Scanner(in).nextInt();
+        ArrayList<Integer> choice=new ArrayList<>();
+        choice.add(scanner);
+        choice.add(scanner1);
+        return choice;
+    }
+
     private String handleInput() {
         System.out.print("Your choice: ");
         return new Scanner(in).nextLine();
