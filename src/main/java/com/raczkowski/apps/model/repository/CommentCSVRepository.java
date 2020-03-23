@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CommentFileRepository implements CommentRepository {
-    final private File file = new File("Comments.csv");
+public class CommentCSVRepository implements CommentRepository {
+    private final File file;
+
+    public CommentCSVRepository(String filename) {
+        this.file = new File(filename);
+    }
 
     @Override
     public void addComment(Comment comment, Article article) {

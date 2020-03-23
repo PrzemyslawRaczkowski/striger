@@ -1,62 +1,61 @@
 package com.raczkowski.apps.model;
 
-import com.raczkowski.apps.model.repository.ArticlesFileRepository;
-import com.raczkowski.apps.model.repository.CommentFileRepository;
+import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
+import com.raczkowski.apps.model.repository.ArticlesRepository;
+import com.raczkowski.apps.model.repository.CommentCSVRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static java.time.LocalDate.now;
 
 public class ArticlesStatistics {
+    private ArticlesRepository articlesRepository;
 
-    private ArticlesFileRepository articlesRepository = new ArticlesFileRepository();
-    private CommentFileRepository commentFileRepository = new CommentFileRepository();
+    public ArticlesStatistics(ArticlesRepository articlesRepository) {
+        this.articlesRepository = articlesRepository;
+    }
 
-    public ArrayList<Article> articlesFromToday() {
-        ArrayList<Article> articles = new ArrayList<>();
-        for (int i = 0; i < articlesRepository.loadArticles().size(); i++) {
-            if (articlesRepository.loadArticles().get(i).getLocalDate().equals(LocalDate.now())) {
-                articles.add(articlesRepository.loadArticles().get(i));
+    public List<Article> articlesFromToday() {
+        return getArticlesForPredicate(article -> article.getLocalDate().equals(now()));
+    }
+
+    public List<Article> articlesOfAuthor(String author) {
+        return getArticlesForPredicate(article -> article.getAuthor().equalsIgnoreCase(author));
+    }
+
+    //    TODO: zrobić na datach
+    public List<Article> articlesFromRange(List<Integer> choice) {
+        return getArticlesForPredicate(article -> article.getLocalDate().getMonth().getValue() >= choice.get(0)
+                && article.getLocalDate().getMonth().getValue() <= choice.get(1));
+    }
+
+    private List<Article> getArticlesForPredicate(Predicate<Article> predicate) {
+        List<Article> articles = new ArrayList<>();
+        for (Article article : articlesRepository.loadArticles()) {
+            if (predicate.test(article)) {
+                articles.add(article);
+            }
+        }
+
+        return articles;
+    }
+
+    public List<Article> articlesOfLongestContext() {
+        List<Article> articles = new ArrayList<>();
+        int counter = articlesRepository.loadArticles().get(0).getContent().length();
+        for (Article article : articlesRepository.loadArticles()) {
+            if (article.getContent().length() >= counter) {
+                articles.add(0, article);
+                counter = article.getContent().length();
             }
         }
         return articles;
     }
 
-    public ArrayList<Article> articlesOfAuthor(String author) {
-        ArrayList<Article> articlesOfAuthor = new ArrayList<>();
-        for (int i = 0; i < articlesRepository.loadArticles().size(); i++) {
-            if (articlesRepository.loadArticles().get(i).getAuthor().equalsIgnoreCase(author)) {
-                articlesOfAuthor.add(articlesRepository.loadArticles().get(i));
-            }
-        }
-        return articlesOfAuthor;
-    }
-
-    public ArrayList<Article> articlesOfLongestContext() {
-        ArrayList<Article> longestArticles = new ArrayList<>();
-        int counter = articlesRepository.loadArticles().get(0).getContent().length();
-        for (int i = 0; i < articlesRepository.loadArticles().size(); i++) {
-            if (articlesRepository.loadArticles().get(i).getContent().length() > counter) {
-                longestArticles.add(0, articlesRepository.loadArticles().get(i));
-                counter = articlesRepository.loadArticles().get(i).getContent().length();
-            }
-        }
-        return longestArticles;
-    }
-
-    public ArrayList<Article> articlesFromRange(List<Integer> choice) {
-        ArrayList<Article> articlesFrom = new ArrayList<>();
-        for (int i = 0; i < articlesRepository.loadArticles().size(); i++) {
-            if (articlesRepository.loadArticles().get(i).getLocalDate().getMonth().getValue() >= (choice.get(0))
-                    && articlesRepository.loadArticles().get(i).getLocalDate().getMonth().getValue() <= (choice.get(1))) {
-                articlesFrom.add(articlesRepository.loadArticles().get(i));
-            }
-        }
-        return articlesFrom;
-    }
-
-    public List<Article> articlesFiler(String choice) {
-        ArrayList<Article> articlesSorted = new ArrayList<>(articlesRepository.loadArticles());
+    public List<Article> articlesFilter(String choice) {
+        List<Article> articlesSorted = new ArrayList<>(articlesRepository.loadArticles());
         Article temporaryArticle;
         if (articlesSorted.size() > 1) {
             if (choice.equals("1")) {

@@ -5,10 +5,15 @@ import com.raczkowski.apps.model.Article;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ArticlesFileRepository implements ArticlesRepository {
-    final private File file = new File("Articles.csv");
-    final private String CSV_SEPARATOR = ",";
+public class ArticlesCSVRepository implements ArticlesRepository {
+    private final File file;
+    private static final String CSV_SEPARATOR = ",";
+
+    public ArticlesCSVRepository(String filename) {
+        this.file = new File(filename);
+    }
 
     @Override
     public void addArticle(Article article) {
@@ -21,19 +26,37 @@ public class ArticlesFileRepository implements ArticlesRepository {
     }
 
     @Override
-    public ArrayList<Article> loadArticles() {
-        return articlesReader();
+    public List<Article> loadArticles() {
+        List<Article> listOfReadArticles = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] attributes = line.split(",");
+                Article article = createArticle(attributes);
+                listOfReadArticles.add(article);
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return listOfReadArticles;
     }
 
     @Override
     public Article loadArticleById(int id) {
-        return articlesReader().get(id - 1);
+        for (Article article : loadArticles()) {
+            if (article.getId() == id) {
+                return article;
+            }
+        }
+
+        throw new ArticleNotFoundException(id);
     }
 
     private void addSingleArticle(Article article) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-            String oneLine = (articlesReader().size() +
+            String oneLine = (loadArticles().size() +
                     CSV_SEPARATOR +
                     article.getTitle() +
                     CSV_SEPARATOR +
@@ -51,23 +74,8 @@ public class ArticlesFileRepository implements ArticlesRepository {
         }
     }
 
-    private ArrayList<Article> articlesReader() {
-        ArrayList<Article> listOfReadArticles = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] attributes = line.split(",");
-                Article article = createArticle(attributes);
-                listOfReadArticles.add(article);
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return listOfReadArticles;
-    }
 
-    private static Article createArticle(String[] metadata) {
+    private Article createArticle(String[] metadata) {
         int id = Integer.parseInt(metadata[0]);
         String title = metadata[1];
         String content = metadata[2];
@@ -75,7 +83,6 @@ public class ArticlesFileRepository implements ArticlesRepository {
         LocalDate localDate = LocalDate.parse(metadata[4]);
         return new Article(id, title, content, author, localDate);
     }
-
 
     private void articlesWriter(ArrayList<Article> articlesList) {
         try {

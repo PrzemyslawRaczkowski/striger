@@ -5,7 +5,6 @@ import com.raczkowski.apps.model.ArticlesStatistics;
 
 import com.raczkowski.apps.model.CommentCreator;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentFileRepository;
 import com.raczkowski.apps.model.repository.CommentRepository;
 import com.raczkowski.apps.view.View;
 
@@ -17,17 +16,24 @@ import static java.lang.System.in;
 public class ArticlesController implements Controller {
 
     private final ArticlesRepository articlesRepository;
+    private final CommentRepository commentRepository;
     private final ArticlesCreator articlesCreator;
     private final ArticlesStatistics articlesStatistics;
     private final View menu;
+    private final TablePrinter tablePrinter;
 
     public ArticlesController(ArticlesRepository articlesRepository,
+                              CommentRepository commentRepository,
                               ArticlesCreator articlesCreator,
-                              ArticlesStatistics articlesStatistics, View menu) {
+                              ArticlesStatistics articlesStatistics,
+                              View menu,
+                              TablePrinter tablePrinter) {
         this.articlesRepository = articlesRepository;
+        this.commentRepository = commentRepository;
         this.articlesCreator = articlesCreator;
         this.articlesStatistics = articlesStatistics;
         this.menu = menu;
+        this.tablePrinter = tablePrinter;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class ArticlesController implements Controller {
                     System.out.println(articlesStatistics.articlesOfLongestContext());
                     break;
                 case "7":
-                    System.out.println(articlesStatistics.articlesFiler(sortMenu()));
+                    System.out.println(articlesStatistics.articlesFilter(sortMenu()));
                     break;
                 case "B":
                     run = false;
@@ -99,7 +105,6 @@ public class ArticlesController implements Controller {
     }
 
     private void articlesChoice() {
-        CommentRepository commentRepository = new CommentFileRepository();
         CommentCreator commentCreator = new CommentCreator();
         System.out.println("What do you want to do next ?");
         System.out.println("1. Add new comment.");
@@ -124,7 +129,7 @@ public class ArticlesController implements Controller {
                     System.out.println("Choose id of Article: ");
                     String choice2 = new Scanner(in).nextLine();
                     System.out.println(commentRepository.
-                            commentsOfArticles(articlesRepository.loadArticles().get(Integer.parseInt(choice2)-1)));
+                            commentsOfArticles(articlesRepository.loadArticles().get(Integer.parseInt(choice2) - 1)));
                     run = false;
                     break;
                 case "B":

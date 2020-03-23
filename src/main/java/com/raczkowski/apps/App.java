@@ -1,15 +1,12 @@
 package com.raczkowski.apps;
 
-import com.raczkowski.apps.controller.ArticlesController;
-import com.raczkowski.apps.controller.CommentsController;
-import com.raczkowski.apps.controller.RootController;
-import com.raczkowski.apps.controller.UsersController;
+import com.raczkowski.apps.controller.*;
 import com.raczkowski.apps.model.ArticlesCreator;
 import com.raczkowski.apps.model.ArticlesStatistics;
 import com.raczkowski.apps.model.CommentCreator;
-import com.raczkowski.apps.model.repository.ArticlesFileRepository;
+import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentFileRepository;
+import com.raczkowski.apps.model.repository.CommentCSVRepository;
 import com.raczkowski.apps.view.Components;
 import com.raczkowski.apps.view.Menu;
 
@@ -19,13 +16,13 @@ import static java.util.Arrays.asList;
 
 public class App {
 
-    private final List<String> rootMenuComponents = asList(
+    private static final List<String> rootMenuComponents = asList(
             "1. Open articles menager.",
             "2. Show comments.",
             "3. Show users.",
-            " Q - for quit");
+            "Q - for quit");
 
-    private final List<String> articlesMenuComponents = asList(
+    private static final List<String> articlesMenuComponents = asList(
             "1. Show articles.",
             "2. Add new article.",
             "3. Show articles from today.",
@@ -33,29 +30,33 @@ public class App {
             "5. Show articles for author.",
             "6. Get longest article.",
             "7. Filter articles.",
-            " B - for back");
+            "B - for back");
 
-    private final List<String> commentsMenuComponents = asList(
+    private static final List<String> commentsMenuComponents = asList(
             "1. Show Comments",
             "2. Create Comment",
             "B - for back");
 
     public static void main(String[] args) {
-        new App().run();
+        run();
     }
 
-    private void run() {
+    private static void run() {
+        ArticlesRepository articlesRepository = new ArticlesCSVRepository("src/main/resources/Articles.csv");
+        CommentCSVRepository commentsRepository = new CommentCSVRepository("src/main/resources/Comments.csv");
+
         new RootController(
                 new ArticlesController(
-                        new ArticlesFileRepository(),
+                        articlesRepository,
+                        commentsRepository,
                         new ArticlesCreator(),
-                        new ArticlesStatistics()
-                        , new Menu(
-                        new Components(articlesMenuComponents)
-                )),
+                        new ArticlesStatistics(articlesRepository),
+                        new Menu(new Components(articlesMenuComponents)), new TablePrinter()),
                 new UsersController(),
-                new CommentsController(new CommentFileRepository(), new Menu(new Components(commentsMenuComponents)), new CommentCreator(), new ArticlesFileRepository() {
-                }),
+                new CommentsController(commentsRepository,
+                        new Menu(new Components(commentsMenuComponents)),
+                        new CommentCreator(),
+                        articlesRepository),
                 new Menu(
                         new Components(rootMenuComponents)
                 )

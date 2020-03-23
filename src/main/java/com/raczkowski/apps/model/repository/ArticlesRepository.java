@@ -3,6 +3,7 @@ package com.raczkowski.apps.model.repository;
 import com.raczkowski.apps.model.Article;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ArticlesRepository {
 
@@ -10,7 +11,7 @@ public interface ArticlesRepository {
 
     void addArticles(ArrayList<Article> articles);
 
-    ArrayList<Article> loadArticles();
+    List<Article> loadArticles();
 
     Article loadArticleById(int id);
 

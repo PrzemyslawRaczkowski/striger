@@ -2,7 +2,7 @@ package com.raczkowski.apps.controller;
 
 import com.raczkowski.apps.model.CommentCreator;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentFileRepository;
+import com.raczkowski.apps.model.repository.CommentCSVRepository;
 import com.raczkowski.apps.model.repository.CommentRepository;
 import com.raczkowski.apps.view.View;
 
@@ -17,8 +17,10 @@ public class CommentsController implements Controller {
     private final CommentCreator commentCreator;
     private final ArticlesRepository articlesRepository;
 
-    public CommentsController(CommentFileRepository commentFileRepository
-            , View menu, CommentCreator commentCreator, ArticlesRepository articlesRepository) {
+    public CommentsController(CommentCSVRepository commentFileRepository,
+                              View menu,
+                              CommentCreator commentCreator,
+                              ArticlesRepository articlesRepository) {
         this.menu = menu;
         this.commentRepository = commentFileRepository;
         this.commentCreator = commentCreator;
@@ -49,6 +51,7 @@ public class CommentsController implements Controller {
             }
         }
     }
+
     private String handleInput() {
         System.out.print("Your choice: ");
         return new Scanner(in).nextLine();
