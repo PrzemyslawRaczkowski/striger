@@ -6,7 +6,10 @@ import com.raczkowski.apps.controller.RootController;
 import com.raczkowski.apps.controller.UsersController;
 import com.raczkowski.apps.model.ArticlesCreator;
 import com.raczkowski.apps.model.ArticlesStatistics;
+import com.raczkowski.apps.model.CommentCreator;
 import com.raczkowski.apps.model.repository.ArticlesFileRepository;
+import com.raczkowski.apps.model.repository.ArticlesRepository;
+import com.raczkowski.apps.model.repository.CommentFileRepository;
 import com.raczkowski.apps.view.Components;
 import com.raczkowski.apps.view.Menu;
 
@@ -32,6 +35,11 @@ public class App {
             "7. Filter articles.",
             " B - for back");
 
+    private final List<String> commentsMenuComponents = asList(
+            "1. Show Comments",
+            "2. Create Comment",
+            "B - for back");
+
     public static void main(String[] args) {
         new App().run();
     }
@@ -43,10 +51,11 @@ public class App {
                         new ArticlesCreator(),
                         new ArticlesStatistics()
                         , new Menu(
-                                new Components(articlesMenuComponents)
-                        )),
+                        new Components(articlesMenuComponents)
+                )),
                 new UsersController(),
-                new CommentsController(),
+                new CommentsController(new CommentFileRepository(), new Menu(new Components(commentsMenuComponents)), new CommentCreator(), new ArticlesFileRepository() {
+                }),
                 new Menu(
                         new Components(rootMenuComponents)
                 )

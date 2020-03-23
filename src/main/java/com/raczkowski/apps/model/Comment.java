@@ -5,15 +5,13 @@ import java.time.LocalDate;
 public class Comment {
     private int id;
     private int idOfArticle;
-    private int idOfUser;
     private String content;
     private String author;
-    LocalDate localDate;
+    private LocalDate localDate;
 
-    public Comment(int id, int idOfArticle,int idOfUser, String content, String author, LocalDate localDate) {
+    public Comment(int id, int idOfArticle, String content, String author, LocalDate localDate) {
         this.id = id;
         this.idOfArticle = idOfArticle;
-        this.idOfUser=idOfUser;
         this.content = content;
         this.author = author;
         this.localDate = localDate;
@@ -25,10 +23,6 @@ public class Comment {
 
     public int getIdOfArticle() {
         return idOfArticle;
-    }
-
-    public int getIdOfUser() {
-        return idOfUser;
     }
 
     public String getContent() {
@@ -48,7 +42,6 @@ public class Comment {
         return "Comment{ " +
                 " id =" + id +
                 ", idOfArticle = " + idOfArticle +
-                ", idOfUser = " + idOfUser +
                 ", content = " + content +
                 ", author = " + author +
                 ", localDate = " + localDate +

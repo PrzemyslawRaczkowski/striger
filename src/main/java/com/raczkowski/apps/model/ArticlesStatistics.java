@@ -1,6 +1,7 @@
 package com.raczkowski.apps.model;
 
 import com.raczkowski.apps.model.repository.ArticlesFileRepository;
+import com.raczkowski.apps.model.repository.CommentFileRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 public class ArticlesStatistics {
 
     private ArticlesFileRepository articlesRepository = new ArticlesFileRepository();
+    private CommentFileRepository commentFileRepository = new CommentFileRepository();
 
     public ArrayList<Article> articlesFromToday() {
         ArrayList<Article> articles = new ArrayList<>();

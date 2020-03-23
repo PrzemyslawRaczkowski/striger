@@ -27,23 +27,23 @@ public class ArticlesFileRepository implements ArticlesRepository {
 
     @Override
     public Article loadArticleById(int id) {
-        return articlesReader().get(id);
+        return articlesReader().get(id - 1);
     }
 
-    private void addSingleArticle (Article article) {
+    private void addSingleArticle(Article article) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-                String oneLine = (articlesReader().size() +
-                        CSV_SEPARATOR +
-                        article.getTitle() +
-                        CSV_SEPARATOR +
-                        article.getContent() +
-                        CSV_SEPARATOR +
-                        article.getAuthor() +
-                        CSV_SEPARATOR +
-                        article.getLocalDate());
-                bw.write(oneLine);
-                bw.newLine();
+            String oneLine = (articlesReader().size() +
+                    CSV_SEPARATOR +
+                    article.getTitle() +
+                    CSV_SEPARATOR +
+                    article.getContent() +
+                    CSV_SEPARATOR +
+                    article.getAuthor() +
+                    CSV_SEPARATOR +
+                    article.getLocalDate());
+            bw.write(oneLine);
+            bw.newLine();
             bw.flush();
             bw.close();
         } catch (IOException e) {
