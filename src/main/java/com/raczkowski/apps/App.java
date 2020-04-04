@@ -1,9 +1,7 @@
 package com.raczkowski.apps;
 
 import com.raczkowski.apps.controller.*;
-import com.raczkowski.apps.model.ArticlesCreator;
-import com.raczkowski.apps.model.ArticlesStatistics;
-import com.raczkowski.apps.model.CommentCreator;
+import com.raczkowski.apps.model.*;
 import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
 import com.raczkowski.apps.model.repository.CommentCSVRepository;
@@ -51,12 +49,16 @@ public class App {
                         commentsRepository,
                         new ArticlesCreator(),
                         new ArticlesStatistics(articlesRepository),
-                        new Menu(new Components(articlesMenuComponents)), new TablePrinter()),
+                        new Menu(new Components(articlesMenuComponents)),
+                        new TablePrinter(),
+                        new CommentCreator(),
+                        new DataRange()),
                 new UsersController(),
                 new CommentsController(commentsRepository,
                         new Menu(new Components(commentsMenuComponents)),
                         new CommentCreator(),
-                        articlesRepository),
+                        articlesRepository,
+                        new TablePrinter()),
                 new Menu(
                         new Components(rootMenuComponents)
                 )

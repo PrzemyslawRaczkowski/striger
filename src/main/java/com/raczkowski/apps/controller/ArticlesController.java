@@ -4,11 +4,12 @@ import com.raczkowski.apps.model.ArticlesCreator;
 import com.raczkowski.apps.model.ArticlesStatistics;
 
 import com.raczkowski.apps.model.CommentCreator;
+import com.raczkowski.apps.model.DataRange;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
 import com.raczkowski.apps.model.repository.CommentRepository;
 import com.raczkowski.apps.view.View;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import static java.lang.System.in;
@@ -21,19 +22,25 @@ public class ArticlesController implements Controller {
     private final ArticlesStatistics articlesStatistics;
     private final View menu;
     private final TablePrinter tablePrinter;
+    private final CommentCreator commentCreator;
+    private final DataRange dataRange;
 
     public ArticlesController(ArticlesRepository articlesRepository,
                               CommentRepository commentRepository,
                               ArticlesCreator articlesCreator,
                               ArticlesStatistics articlesStatistics,
                               View menu,
-                              TablePrinter tablePrinter) {
+                              TablePrinter tablePrinter,
+                              CommentCreator commentCreator,
+                              DataRange dataRange) {
         this.articlesRepository = articlesRepository;
         this.commentRepository = commentRepository;
         this.articlesCreator = articlesCreator;
         this.articlesStatistics = articlesStatistics;
         this.menu = menu;
         this.tablePrinter = tablePrinter;
+        this.commentCreator=commentCreator;
+        this.dataRange=dataRange;
     }
 
     @Override
@@ -45,26 +52,26 @@ public class ArticlesController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    System.out.println(articlesRepository.loadArticles());
+                    tablePrinter.printArticles(articlesRepository.loadArticles());
                     articlesChoice();
                     break;
                 case "2":
                     articlesRepository.addArticle(articlesCreator.create());
                     break;
                 case "3":
-                    System.out.println(articlesStatistics.articlesFromToday());
+                    tablePrinter.printArticles(articlesStatistics.articlesFromToday());
                     break;
                 case "4":
-                    System.out.println(articlesStatistics.articlesFromRange(rangeMenu()));
+                    tablePrinter.printArticles(articlesStatistics.articlesFromRange(rangeMenu()));
                     break;
                 case "5":
-                    System.out.println(articlesStatistics.articlesOfAuthor(authorMenu()));
+                    tablePrinter.printArticles(articlesStatistics.articlesOfAuthor(authorMenu()));
                     break;
                 case "6":
-                    System.out.println(articlesStatistics.articlesOfLongestContext());
+                    tablePrinter.printArticles(articlesStatistics.articlesOfLongestContext());
                     break;
                 case "7":
-                    System.out.println(articlesStatistics.articlesFilter(sortMenu()));
+                    tablePrinter.printArticles(articlesStatistics.articlesFilter(sortMenu()));
                     break;
                 case "B":
                     run = false;
@@ -87,16 +94,13 @@ public class ArticlesController implements Controller {
         return new Scanner(in).nextLine();
     }
 
-    private ArrayList<Integer> rangeMenu() {
-        System.out.println("Insert range of months.");
-        System.out.println("First month: ");
-        int scanner = new Scanner(in).nextInt();
-        System.out.println("Last month: ");
-        int scanner1 = new Scanner(in).nextInt();
-        ArrayList<Integer> choice = new ArrayList<>();
-        choice.add(scanner);
-        choice.add(scanner1);
-        return choice;
+    private DataRange rangeMenu() {
+        System.out.println("Insert range of date in format (yyyy-mm-dd).");
+        System.out.println("Start range: ");
+        dataRange.setStartRangeTime(LocalDate.parse(new Scanner(in).nextLine()));
+        System.out.println("End range: ");
+        dataRange.setEndRangeTime(LocalDate.parse(new Scanner(in).nextLine()));
+        return dataRange;
     }
 
     private String handleInput() {
@@ -105,7 +109,6 @@ public class ArticlesController implements Controller {
     }
 
     private void articlesChoice() {
-        CommentCreator commentCreator = new CommentCreator();
         System.out.println("What do you want to do next ?");
         System.out.println("1. Add new comment.");
         System.out.println("2. Show all comment of article");
@@ -115,20 +118,20 @@ public class ArticlesController implements Controller {
         while (run) {
             switch (choice) {
                 case "1":
-                    System.out.println(articlesRepository.loadArticles());
+                    tablePrinter.printArticles(articlesRepository.loadArticles());
                     System.out.println("Choose id of Article: ");
                     String choice1 = new Scanner(in).nextLine();
-                    System.out.println(articlesRepository.loadArticleById(Integer.parseInt(choice1)));
+                    tablePrinter.printArticle(articlesRepository.loadArticleById(Integer.parseInt(choice1)));
                     commentRepository.addComment(commentCreator.create(),
                             articlesRepository.loadArticleById(Integer.parseInt(choice1)));
                     System.out.println("Successfully added !");
                     run = false;
                     break;
                 case "2":
-                    System.out.println(articlesRepository.loadArticles());
+                    tablePrinter.printArticles(articlesRepository.loadArticles());
                     System.out.println("Choose id of Article: ");
                     String choice2 = new Scanner(in).nextLine();
-                    System.out.println(commentRepository.
+                    tablePrinter.printComments(commentRepository.
                             commentsOfArticles(articlesRepository.loadArticles().get(Integer.parseInt(choice2) - 1)));
                     run = false;
                     break;

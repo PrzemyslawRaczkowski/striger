@@ -16,15 +16,18 @@ public class CommentsController implements Controller {
     private final View menu;
     private final CommentCreator commentCreator;
     private final ArticlesRepository articlesRepository;
+    private final TablePrinter tablePrinter;
 
     public CommentsController(CommentCSVRepository commentFileRepository,
                               View menu,
                               CommentCreator commentCreator,
-                              ArticlesRepository articlesRepository) {
+                              ArticlesRepository articlesRepository,
+                              TablePrinter tablePrinter) {
         this.menu = menu;
         this.commentRepository = commentFileRepository;
         this.commentCreator = commentCreator;
         this.articlesRepository = articlesRepository;
+        this.tablePrinter = tablePrinter;
     }
 
     @Override
@@ -36,12 +39,12 @@ public class CommentsController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    System.out.println(commentRepository.showComment());
+                    tablePrinter.printComments(commentRepository.showComment());
                     break;
                 case "2":
-                    System.out.println(articlesRepository.loadArticles());
-                    String choicedArticle = commentMenu();
-                    commentRepository.addComment(commentCreator.create(), articlesRepository.loadArticleById(Integer.parseInt(choicedArticle)));
+                    tablePrinter.printArticles(articlesRepository.loadArticles());
+                    String choiceArticle = commentMenu();
+                    commentRepository.addComment(commentCreator.create(), articlesRepository.loadArticleById(Integer.parseInt(choiceArticle)));
                     break;
                 case "B":
                     run = false;

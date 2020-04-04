@@ -25,10 +25,9 @@ public class ArticlesStatistics {
         return getArticlesForPredicate(article -> article.getAuthor().equalsIgnoreCase(author));
     }
 
-    //    TODO: zrobić na datach
-    public List<Article> articlesFromRange(List<Integer> choice) {
-        return getArticlesForPredicate(article -> article.getLocalDate().getMonth().getValue() >= choice.get(0)
-                && article.getLocalDate().getMonth().getValue() <= choice.get(1));
+    public List<Article> articlesFromRange(DataRange dataRange) {
+        return getArticlesForPredicate(article -> article.getLocalDate().isAfter(dataRange.getStartRangeTime())
+                && article.getLocalDate().isBefore(dataRange.getEndRangeTime()));
     }
 
     private List<Article> getArticlesForPredicate(Predicate<Article> predicate) {
@@ -38,7 +37,6 @@ public class ArticlesStatistics {
                 articles.add(article);
             }
         }
-
         return articles;
     }
 
