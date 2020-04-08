@@ -1,12 +1,13 @@
 package com.raczkowski.apps.model.repository;
 
-import com.raczkowski.apps.model.TemporaryUser;
 import com.raczkowski.apps.model.User;
+import com.raczkowski.apps.model.UserRegistrationData;
 
 import java.util.List;
 
-public interface UsersRepository {
-    void addUser(TemporaryUser user);
+public interface UsersDao {
+
+    void addUser(UserRegistrationData user);
 
     List<User> loadUsers();
 }

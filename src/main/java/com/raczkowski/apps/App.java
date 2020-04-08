@@ -41,16 +41,17 @@ public class App {
     }
 
     private static void run() {
-        ArticlesRepository articlesRepository = new ArticlesCSVRepository("src/main/resources/Articles.csv");
-        CommentCSVRepository commentsRepository = new CommentCSVRepository("src/main/resources/Comments.csv");
-        UsersCSVRepository usersRepository = new UsersCSVRepository("src/main/resources/Users.csv");
+        ArticlesDao articlesDao = new ArticlesCSVRepository("src/main/resources/Articles.csv");
+        CommentCSVDao commentsRepository = new CommentCSVDao("src/main/resources/Comments.csv");
+        UsersCSVDao usersRepository = new UsersCSVDao("src/main/resources/Users.csv");
+
         new RegistrationController(
                 new RootController(
                         new ArticlesController(
-                                articlesRepository,
+                                articlesDao,
                                 commentsRepository,
                                 new ArticlesCreator(),
-                                new ArticlesStatistics(articlesRepository),
+                                new ArticlesStatistics(articlesDao),
                                 new Menu(new Components(articlesMenuComponents)),
                                 new TablePrinter(),
                                 new CommentCreator(),
@@ -59,13 +60,12 @@ public class App {
                         new CommentsController(commentsRepository,
                                 new Menu(new Components(commentsMenuComponents)),
                                 new CommentCreator(),
-                                articlesRepository,
+                                articlesDao,
                                 new TablePrinter()),
                         new Menu(
                                 new Components(rootMenuComponents)
-                        )
-                ), new Components(registrationComponents),
-                new TemporaryUser(),
+                        )),
+                new Components(registrationComponents),
                 new LogIn(usersRepository),
                 new Registration(usersRepository)).handle();
     }

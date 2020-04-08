@@ -1,9 +1,9 @@
 package com.raczkowski.apps.controller;
 
 import com.raczkowski.apps.model.CommentCreator;
-import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentCSVRepository;
-import com.raczkowski.apps.model.repository.CommentRepository;
+import com.raczkowski.apps.model.repository.ArticlesDao;
+import com.raczkowski.apps.model.repository.CommentCSVDao;
+import com.raczkowski.apps.model.repository.CommentDao;
 import com.raczkowski.apps.view.View;
 
 import java.util.Scanner;
@@ -12,21 +12,21 @@ import static java.lang.System.in;
 
 public class CommentsController implements Controller {
 
-    private final CommentRepository commentRepository;
+    private final CommentDao commentDao;
     private final View menu;
     private final CommentCreator commentCreator;
-    private final ArticlesRepository articlesRepository;
+    private final ArticlesDao articlesDao;
     private final TablePrinter tablePrinter;
 
-    public CommentsController(CommentCSVRepository commentFileRepository,
+    public CommentsController(CommentCSVDao commentFileRepository,
                               View menu,
                               CommentCreator commentCreator,
-                              ArticlesRepository articlesRepository,
+                              ArticlesDao articlesDao,
                               TablePrinter tablePrinter) {
         this.menu = menu;
-        this.commentRepository = commentFileRepository;
+        this.commentDao = commentFileRepository;
         this.commentCreator = commentCreator;
-        this.articlesRepository = articlesRepository;
+        this.articlesDao = articlesDao;
         this.tablePrinter = tablePrinter;
     }
 
@@ -39,12 +39,12 @@ public class CommentsController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    tablePrinter.printComments(commentRepository.showComment());
+                    tablePrinter.printComments(commentDao.showComment());
                     break;
                 case "2":
-                    tablePrinter.printArticles(articlesRepository.loadArticles());
+                    tablePrinter.printArticles(articlesDao.loadArticles());
                     String choiceArticle = commentMenu();
-                    commentRepository.addComment(commentCreator.create(), articlesRepository.loadArticleById(Integer.parseInt(choiceArticle)));
+                    commentDao.addComment(commentCreator.create(), articlesDao.loadArticleById(Integer.parseInt(choiceArticle)));
                     break;
                 case "B":
                     run = false;

@@ -1,29 +1,28 @@
 package com.raczkowski.apps.model;
 
-import com.raczkowski.apps.model.repository.UsersRepository;
+import com.raczkowski.apps.model.repository.UsersDao;
 
 import java.util.List;
 
 public class LogIn {
-    private final UsersRepository userRepository;
+    private final UsersDao userRepository;
 
-    public LogIn(UsersRepository userRepository) {
+    public LogIn(UsersDao userRepository) {
         this.userRepository = userRepository;
     }
 
-    public boolean logIn(TemporaryUser temporaryUser) {
-        boolean status = false;
+    public User logIn(UserLoginData userLoginData) {
         List<User> users = userRepository.loadUsers();
 
+        User loggedInUser = null;
         for (User user : users) {
-            if (temporaryUser.geteMail().equalsIgnoreCase(user.geteMail())) {
-                if(temporaryUser.getPassword().equals(user.getPassword()));
-                {
-                    System.out.println("Successfully logged");
-                    status=true;
+            if (userLoginData.getEmail().equalsIgnoreCase(user.getMail())) {
+                if (userLoginData.getPassword().equals(user.getPassword())) {
+                    System.out.println("Successfully logged in");
+                    loggedInUser = user;
                 }
             }
         }
-        return status;
+        return loggedInUser;
     }
 }

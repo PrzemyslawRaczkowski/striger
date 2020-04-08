@@ -5,7 +5,7 @@ import com.raczkowski.apps.model.Comment;
 
 import java.util.List;
 
-public interface CommentRepository {
+public interface CommentDao {
 
     void addComment(Comment comment, Article article);
 

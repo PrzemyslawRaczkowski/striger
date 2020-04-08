@@ -1,22 +1,22 @@
 package com.raczkowski.apps.model.repository;
 
-import com.raczkowski.apps.model.TemporaryUser;
+import com.raczkowski.apps.model.UserRegistrationData;
 import com.raczkowski.apps.model.User;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersCSVRepository implements UsersRepository {
+public class UsersCSVDao implements UsersDao {
 
     final private File file;
 
-    public UsersCSVRepository(String filename) {
+    public UsersCSVDao(String filename) {
         this.file = new File(filename);
     }
 
     @Override
-    public void addUser(TemporaryUser user) {
+    public void addUser(UserRegistrationData user) {
         userWriter(user);
     }
 
@@ -50,7 +50,7 @@ public class UsersCSVRepository implements UsersRepository {
         return new User(id, name, lastName, eMail, password);
     }
 
-    private void userWriter(TemporaryUser user) {
+    private void userWriter(UserRegistrationData user) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             String CSV_SEPARATOR = ",";
@@ -60,7 +60,7 @@ public class UsersCSVRepository implements UsersRepository {
                     + CSV_SEPARATOR
                     + user.getLastName()
                     + CSV_SEPARATOR
-                    + user.geteMail()
+                    + user.getMail()
                     + CSV_SEPARATOR
                     + user.getPassword()
             );

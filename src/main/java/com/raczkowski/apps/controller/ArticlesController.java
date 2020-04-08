@@ -2,12 +2,10 @@ package com.raczkowski.apps.controller;
 
 import com.raczkowski.apps.model.*;
 
-import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentRepository;
+import com.raczkowski.apps.model.repository.ArticlesDao;
+import com.raczkowski.apps.model.repository.CommentDao;
 import com.raczkowski.apps.view.View;
-import org.apache.commons.lang3.ObjectUtils;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -15,8 +13,8 @@ import static java.lang.System.in;
 
 public class ArticlesController implements Controller {
 
-    private final ArticlesRepository articlesRepository;
-    private final CommentRepository commentRepository;
+    private final ArticlesDao articlesRepository;
+    private final CommentDao commentDao;
     private final ArticlesCreator articlesCreator;
     private final ArticlesStatistics articlesStatistics;
     private final View menu;
@@ -24,16 +22,16 @@ public class ArticlesController implements Controller {
     private final CommentCreator commentCreator;
     private final DataRange dataRange;
 
-    public ArticlesController(ArticlesRepository articlesRepository,
-                              CommentRepository commentRepository,
+    public ArticlesController(ArticlesDao articlesDao,
+                              CommentDao commentDao,
                               ArticlesCreator articlesCreator,
                               ArticlesStatistics articlesStatistics,
                               View menu,
                               TablePrinter tablePrinter,
                               CommentCreator commentCreator,
                               DataRange dataRange) {
-        this.articlesRepository = articlesRepository;
-        this.commentRepository = commentRepository;
+        this.articlesRepository = articlesDao;
+        this.commentDao = commentDao;
         this.articlesCreator = articlesCreator;
         this.articlesStatistics = articlesStatistics;
         this.menu = menu;
@@ -121,7 +119,7 @@ public class ArticlesController implements Controller {
                     System.out.println("Choose id of Article: ");
                     String choice1 = new Scanner(in).nextLine();
                     tablePrinter.printArticle(articlesRepository.loadArticleById(Integer.parseInt(choice1)));
-                    commentRepository.addComment(commentCreator.create(),
+                    commentDao.addComment(commentCreator.create(),
                             articlesRepository.loadArticleById(Integer.parseInt(choice1)));
                     System.out.println("Successfully added !");
                     run = false;
@@ -130,7 +128,7 @@ public class ArticlesController implements Controller {
                     tablePrinter.printArticles(articlesRepository.loadArticles());
                     System.out.println("Choose id of Article: ");
                     String choice2 = new Scanner(in).nextLine();
-                    tablePrinter.printComments(commentRepository.
+                    tablePrinter.printComments(commentDao.
                             commentsOfArticles(articlesRepository.loadArticles().get(Integer.parseInt(choice2) - 1)));
                     run = false;
                     break;

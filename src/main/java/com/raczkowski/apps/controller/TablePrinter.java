@@ -2,14 +2,9 @@ package com.raczkowski.apps.controller;
 
 import com.raczkowski.apps.model.Article;
 import com.raczkowski.apps.model.Comment;
-import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
-import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentCSVRepository;
-import com.raczkowski.apps.model.repository.CommentRepository;
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class TablePrinter {

@@ -10,18 +10,15 @@ import static java.lang.System.in;
 public class RegistrationController implements Controller {
     private final RootController rootController;
     private final View menu;
-    private final TemporaryUser temporaryUser;
     private final LogIn logIn;
     private final Registration registration;
 
-    public RegistrationController(RootController rootController
-            , View menu
-            , TemporaryUser temporaryUser
-            , LogIn logIn
-            , Registration registration) {
+    public RegistrationController(RootController rootController,
+                                  View menu,
+                                  LogIn logIn,
+                                  Registration registration) {
         this.rootController = rootController;
         this.menu = menu;
-        this.temporaryUser = temporaryUser;
         this.logIn = logIn;
         this.registration = registration;
     }
@@ -35,14 +32,13 @@ public class RegistrationController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    logIn();
-                    if (logIn.logIn(temporaryUser)) rootController.handle();
+                    User user = logIn.logIn(getUserDataForLogin());
+                    if (user != null) {
+                        rootController.handle();
+                    }
                     break;
                 case "2":
-                    registration();
-                    if (registration.registration(temporaryUser)) {
-                        if (logIn.logIn(temporaryUser)) rootController.handle();
-                    }
+                    registration.register(getUserDataForRegistration());
                     break;
                 case "Q":
                     run = false;
@@ -52,7 +48,6 @@ public class RegistrationController implements Controller {
                     System.out.println("Unknown command, please try again");
             }
         }
-
     }
 
     private String handleInput() {
@@ -60,23 +55,27 @@ public class RegistrationController implements Controller {
         return new Scanner(in).next();
     }
 
-    private void logIn() {
+    private UserLoginData getUserDataForLogin() {
         System.out.println("Log in:");
         System.out.println("E-mail: ");
-        temporaryUser.seteMail(new Scanner(in).nextLine());
+        String email = new Scanner(in).nextLine();
         System.out.println("Password:");
-        temporaryUser.setPassword(new Scanner(in).nextLine());
+        String password = new Scanner(in).nextLine();
+
+        return new UserLoginData(email, password);
     }
 
-    private void registration() {
+    private UserRegistrationData getUserDataForRegistration() {
         System.out.println("Registration:");
         System.out.println("Type first name:");
-        temporaryUser.setName(new Scanner(in).nextLine());
+        String name = new Scanner(in).nextLine();
         System.out.println("Type last name:");
-        temporaryUser.setLastName(new Scanner(in).nextLine());
+        String lastName = new Scanner(in).nextLine();
         System.out.println("Type your e-mail address:");
-        temporaryUser.seteMail(new Scanner(in).nextLine());
+        String email = new Scanner(in).nextLine();
         System.out.println("Type your password:");
-        temporaryUser.setPassword(new Scanner(in).nextLine());
+        String password = new Scanner(in).nextLine();
+
+        return new UserRegistrationData(name, lastName, email, password);
     }
 }

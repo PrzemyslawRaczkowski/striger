@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticlesCSVRepository implements ArticlesRepository {
+public class ArticlesCSVRepository implements ArticlesDao {
     private final File file;
     private static final String CSV_SEPARATOR = ",";
 

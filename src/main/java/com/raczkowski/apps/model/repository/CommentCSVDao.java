@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CommentCSVRepository implements CommentRepository {
+public class CommentCSVDao implements CommentDao {
     private final File file;
 
-    public CommentCSVRepository(String filename) {
+    public CommentCSVDao(String filename) {
         this.file = new File(filename);
     }
 

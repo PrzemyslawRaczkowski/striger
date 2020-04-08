@@ -1,6 +1,6 @@
 package com.raczkowski.apps.model;
 
-import com.raczkowski.apps.model.repository.ArticlesRepository;
+import com.raczkowski.apps.model.repository.ArticlesDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.function.Predicate;
 import static java.time.LocalDate.now;
 
 public class ArticlesStatistics {
-    private ArticlesRepository articlesRepository;
+    private ArticlesDao articlesDao;
 
-    public ArticlesStatistics(ArticlesRepository articlesRepository) {
-        this.articlesRepository = articlesRepository;
+    public ArticlesStatistics(ArticlesDao articlesDao) {
+        this.articlesDao = articlesDao;
     }
 
     public List<Article> articlesFromToday() {
@@ -30,7 +30,7 @@ public class ArticlesStatistics {
 
     private List<Article> getArticlesForPredicate(Predicate<Article> predicate) {
         List<Article> articles = new ArrayList<>();
-        for (Article article : articlesRepository.loadArticles()) {
+        for (Article article : articlesDao.loadArticles()) {
             if (predicate.test(article)) {
                 articles.add(article);
             }
@@ -40,8 +40,8 @@ public class ArticlesStatistics {
 
     public List<Article> articlesOfLongestContext() {
         List<Article> articles = new ArrayList<>();
-        int counter = articlesRepository.loadArticles().get(0).getContent().length();
-        for (Article article : articlesRepository.loadArticles()) {
+        int counter = articlesDao.loadArticles().get(0).getContent().length();
+        for (Article article : articlesDao.loadArticles()) {
             if (article.getContent().length() >= counter) {
                 articles.add(0, article);
                 counter = article.getContent().length();
@@ -51,7 +51,7 @@ public class ArticlesStatistics {
     }
 
     public List<Article> articlesFilter(String choice) {
-        List<Article> articlesSorted = new ArrayList<>(articlesRepository.loadArticles());
+        List<Article> articlesSorted = new ArrayList<>(articlesDao.loadArticles());
         Article temporaryArticle;
         if (articlesSorted.size() > 1) {
             if (choice.equals("1")) {

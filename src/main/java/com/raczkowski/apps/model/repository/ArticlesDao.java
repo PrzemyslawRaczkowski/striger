@@ -5,7 +5,7 @@ import com.raczkowski.apps.model.Article;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ArticlesRepository {
+public interface ArticlesDao {
 
     void addArticle(Article article);
 
