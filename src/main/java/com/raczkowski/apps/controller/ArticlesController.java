@@ -1,14 +1,13 @@
 package com.raczkowski.apps.controller;
 
-import com.raczkowski.apps.model.ArticlesCreator;
-import com.raczkowski.apps.model.ArticlesStatistics;
+import com.raczkowski.apps.model.*;
 
-import com.raczkowski.apps.model.CommentCreator;
-import com.raczkowski.apps.model.DataRange;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
 import com.raczkowski.apps.model.repository.CommentRepository;
 import com.raczkowski.apps.view.View;
+import org.apache.commons.lang3.ObjectUtils;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -39,8 +38,8 @@ public class ArticlesController implements Controller {
         this.articlesStatistics = articlesStatistics;
         this.menu = menu;
         this.tablePrinter = tablePrinter;
-        this.commentCreator=commentCreator;
-        this.dataRange=dataRange;
+        this.commentCreator = commentCreator;
+        this.dataRange = dataRange;
     }
 
     @Override

@@ -49,14 +49,13 @@ public class ArticlesCSVRepository implements ArticlesRepository {
                 return article;
             }
         }
-
         throw new ArticleNotFoundException(id);
     }
 
     private void addSingleArticle(Article article) {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-            String oneLine = (loadArticles().size() +
+            String oneLine = (loadArticles().size() + 1 +
                     CSV_SEPARATOR +
                     article.getTitle() +
                     CSV_SEPARATOR +
@@ -88,7 +87,7 @@ public class ArticlesCSVRepository implements ArticlesRepository {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
             for (Article articles : articlesList) {
-                String oneLine = (articles.getId() +
+                String oneLine = (loadArticles().size() + 1 +
                         CSV_SEPARATOR +
                         articles.getTitle() +
                         CSV_SEPARATOR +

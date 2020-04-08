@@ -2,9 +2,7 @@ package com.raczkowski.apps;
 
 import com.raczkowski.apps.controller.*;
 import com.raczkowski.apps.model.*;
-import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
-import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentCSVRepository;
+import com.raczkowski.apps.model.repository.*;
 import com.raczkowski.apps.view.Components;
 import com.raczkowski.apps.view.Menu;
 
@@ -13,9 +11,12 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 public class App {
+    private static final List<String> registrationComponents = asList(
+            "1. Log in.",
+            "2. Registration.");
 
     private static final List<String> rootMenuComponents = asList(
-            "1. Open articles menager.",
+            "1. Open articles manager.",
             "2. Show comments.",
             "3. Show users.",
             "Q - for quit");
@@ -42,26 +43,30 @@ public class App {
     private static void run() {
         ArticlesRepository articlesRepository = new ArticlesCSVRepository("src/main/resources/Articles.csv");
         CommentCSVRepository commentsRepository = new CommentCSVRepository("src/main/resources/Comments.csv");
-
-        new RootController(
-                new ArticlesController(
-                        articlesRepository,
-                        commentsRepository,
-                        new ArticlesCreator(),
-                        new ArticlesStatistics(articlesRepository),
-                        new Menu(new Components(articlesMenuComponents)),
-                        new TablePrinter(),
-                        new CommentCreator(),
-                        new DataRange()),
-                new UsersController(),
-                new CommentsController(commentsRepository,
-                        new Menu(new Components(commentsMenuComponents)),
-                        new CommentCreator(),
-                        articlesRepository,
-                        new TablePrinter()),
-                new Menu(
-                        new Components(rootMenuComponents)
-                )
-        ).handle();
+        UsersCSVRepository usersRepository = new UsersCSVRepository("src/main/resources/Users.csv");
+        new RegistrationController(
+                new RootController(
+                        new ArticlesController(
+                                articlesRepository,
+                                commentsRepository,
+                                new ArticlesCreator(),
+                                new ArticlesStatistics(articlesRepository),
+                                new Menu(new Components(articlesMenuComponents)),
+                                new TablePrinter(),
+                                new CommentCreator(),
+                                new DataRange()),
+                        new UsersController(),
+                        new CommentsController(commentsRepository,
+                                new Menu(new Components(commentsMenuComponents)),
+                                new CommentCreator(),
+                                articlesRepository,
+                                new TablePrinter()),
+                        new Menu(
+                                new Components(rootMenuComponents)
+                        )
+                ), new Components(registrationComponents),
+                new TemporaryUser(),
+                new LogIn(usersRepository),
+                new Registration(usersRepository)).handle();
     }
 }

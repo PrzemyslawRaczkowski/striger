@@ -1,8 +1,6 @@
 package com.raczkowski.apps.model;
 
-import com.raczkowski.apps.model.repository.ArticlesCSVRepository;
 import com.raczkowski.apps.model.repository.ArticlesRepository;
-import com.raczkowski.apps.model.repository.CommentCSVRepository;
 
 import java.util.ArrayList;
 import java.util.List;
