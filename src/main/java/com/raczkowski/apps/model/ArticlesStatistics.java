@@ -4,9 +4,13 @@ import com.raczkowski.apps.model.repository.ArticlesDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDate.now;
+import static java.util.stream.Collectors.toList;
 
 public class ArticlesStatistics {
     private ArticlesDao articlesDao;
@@ -24,6 +28,13 @@ public class ArticlesStatistics {
     }
 
     public List<Article> articlesFromRange(DataRange dataRange) {
+        getArticlesForPredicate(new Predicate<Article>() {
+            @Override
+            public boolean test(Article article) {
+                return article.getLocalDate().isAfter(dataRange.getStartRangeTime();
+            }
+        });
+
         return getArticlesForPredicate(article -> article.getLocalDate().isAfter(dataRange.getStartRangeTime())
                 && article.getLocalDate().isBefore(dataRange.getEndRangeTime()));
     }
@@ -79,5 +90,43 @@ public class ArticlesStatistics {
             }
         }
         return articlesSorted;
+    }
+
+    private List<Article> sortedArticles() {
+        List<Article> articles = articlesDao.loadArticles();
+
+        List<String> authors = articles.stream()
+                .map(article -> article.getAuthor())
+                .collect(toList());
+
+        List<Article> articles2 = articles.stream()
+                .filter(article -> article.getAuthor().startsWith("B"))
+                .collect(toList());
+
+
+        long numberOfAuthors = articles.stream()
+                .filter(article -> article.getAuthor().startsWith("B"))
+                .count();
+
+
+        int sum = articles.stream()
+                .map(Article::getId)
+                .reduce(0, Integer::sum);
+
+        boolean result = articles.stream()
+                .filter(article -> article.getAuthor().equals("Siwy z bagien"))
+                .allMatch(article -> article.getLocalDate().getYear() >= 2000);
+
+        Map<String, List<Article>> collect = articles.stream()
+                .collect(Collectors.groupingBy(Article::getAuthor));
+
+    }
+
+    interface Dupa {
+        void dupa();
+    }
+
+    private void function(Dupa dupa) {
+        dupa.dupa();
     }
 }
