@@ -41,7 +41,7 @@ public class App {
     }
 
     private static void run() {
-        ArticlesDao articlesDao = new ArticlesCSVRepository("src/main/resources/Articles.csv");
+        ArticlesDao articlesDao = new ArticlesJDBCDao();
         CommentCSVDao commentsRepository = new CommentCSVDao("src/main/resources/Comments.csv");
         UsersCSVDao usersRepository = new UsersCSVDao("src/main/resources/Users.csv");
 
