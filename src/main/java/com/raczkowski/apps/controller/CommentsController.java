@@ -12,19 +12,19 @@ import static java.lang.System.in;
 
 public class CommentsController implements Controller {
 
-    private final CommentDao commentDao;
+    private final CommentDao commentRepository;
     private final View menu;
     private final CommentCreator commentCreator;
     private final ArticlesDao articlesDao;
     private final TablePrinter tablePrinter;
 
-    public CommentsController(CommentCSVDao commentFileRepository,
+    public CommentsController(CommentDao commentDao,
                               View menu,
                               CommentCreator commentCreator,
                               ArticlesDao articlesDao,
                               TablePrinter tablePrinter) {
         this.menu = menu;
-        this.commentDao = commentFileRepository;
+        this.commentRepository = commentDao;
         this.commentCreator = commentCreator;
         this.articlesDao = articlesDao;
         this.tablePrinter = tablePrinter;
@@ -39,12 +39,12 @@ public class CommentsController implements Controller {
             String userChoice = handleInput();
             switch (userChoice) {
                 case "1":
-                    tablePrinter.printComments(commentDao.showComment());
+                    tablePrinter.printComments(commentRepository.showComment());
                     break;
                 case "2":
                     tablePrinter.printArticles(articlesDao.loadArticles());
                     String choiceArticle = commentMenu();
-                    commentDao.addComment(commentCreator.create(), articlesDao.loadArticleById(Integer.parseInt(choiceArticle)));
+                    commentRepository.addComment(commentCreator.create(), articlesDao.loadArticleById(Integer.parseInt(choiceArticle)));
                     break;
                 case "B":
                     run = false;

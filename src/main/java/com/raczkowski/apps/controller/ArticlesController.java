@@ -14,7 +14,7 @@ import static java.lang.System.in;
 public class ArticlesController implements Controller {
 
     private final ArticlesDao articlesRepository;
-    private final CommentDao commentDao;
+    private final CommentDao commentRepository;
     private final ArticlesCreator articlesCreator;
     private final ArticlesStatistics articlesStatistics;
     private final View menu;
@@ -31,7 +31,7 @@ public class ArticlesController implements Controller {
                               CommentCreator commentCreator,
                               DataRange dataRange) {
         this.articlesRepository = articlesDao;
-        this.commentDao = commentDao;
+        this.commentRepository = commentDao;
         this.articlesCreator = articlesCreator;
         this.articlesStatistics = articlesStatistics;
         this.menu = menu;
@@ -119,16 +119,16 @@ public class ArticlesController implements Controller {
                     System.out.println("Choose id of Article: ");
                     String choice1 = new Scanner(in).nextLine();
                     tablePrinter.printArticle(articlesRepository.loadArticleById(Integer.parseInt(choice1)));
-                    commentDao.addComment(commentCreator.create(),
+                    commentRepository.addComment(commentCreator.create(),
                             articlesRepository.loadArticleById(Integer.parseInt(choice1)));
-                    System.out.println("Successfully added !");
+                    //System.out.println("Successfully added !");
                     run = false;
                     break;
                 case "2":
                     tablePrinter.printArticles(articlesRepository.loadArticles());
                     System.out.println("Choose id of Article: ");
                     String choice2 = new Scanner(in).nextLine();
-                    tablePrinter.printComments(commentDao.
+                    tablePrinter.printComments(commentRepository.
                             commentsOfArticles(articlesRepository.loadArticles().get(Integer.parseInt(choice2) - 1)));
                     run = false;
                     break;

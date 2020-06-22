@@ -42,14 +42,14 @@ public class App {
 
     private static void run() {
         ArticlesDao articlesDao = new ArticlesJDBCDao();
-        CommentCSVDao commentsRepository = new CommentCSVDao("src/main/resources/Comments.csv");
+        CommentDao commentDao = new CommentsJDBCDao();
         UsersCSVDao usersRepository = new UsersCSVDao("src/main/resources/Users.csv");
 
         new RegistrationController(
                 new RootController(
                         new ArticlesController(
                                 articlesDao,
-                                commentsRepository,
+                                commentDao,
                                 new ArticlesCreator(),
                                 new ArticlesStatistics(articlesDao),
                                 new Menu(new Components(articlesMenuComponents)),
@@ -57,7 +57,7 @@ public class App {
                                 new CommentCreator(),
                                 new DataRange()),
                         new UsersController(),
-                        new CommentsController(commentsRepository,
+                        new CommentsController(commentDao,
                                 new Menu(new Components(commentsMenuComponents)),
                                 new CommentCreator(),
                                 articlesDao,

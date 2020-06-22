@@ -1,91 +1,89 @@
 package com.raczkowski.apps.model.repository;
 
 import com.raczkowski.apps.model.Article;
+import com.raczkowski.apps.model.Comment;
 
-import java.sql.DriverManager;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 
-public class ArticlesJDBCDao implements ArticlesDao {
+public class CommentsJDBCDao implements CommentDao {
     private final String url = "jdbc:postgresql://localhost:5432/articleservice";
     private final String user = "postgres";
     private final String password = "Tajfun";
 
+
     @Override
-    public void addArticle(Article article) {
+    public void addComment(Comment comment, Article article) {
         Connection connection = connect();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO articles(id, title, content, author, localdate) VALUES (?,?,?,?,?)");
-            preparedStatement.setInt(1, loadArticles().size());
-            preparedStatement.setString(2, article.getTitle());
-            preparedStatement.setString(3, article.getContent());
-            preparedStatement.setString(4, article.getAuthor());
-            preparedStatement.setDate(5, Date.valueOf(article.getLocalDate()));
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO comments(id, idofarticle, content, author, localdate) VALUES (?,?,?,?,?)");
+            preparedStatement.setInt(1, showComment().size());
+            preparedStatement.setInt(2, article.getId());
+            preparedStatement.setString(3, comment.getContent());
+            preparedStatement.setString(4, comment.getAuthor());
+            preparedStatement.setDate(5, Date.valueOf(comment.getLocalDate()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Cannot insert Article");
+            System.out.println("Cannot insert Comment");
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void addArticles(ArrayList<Article> articles) {
+    public List<Comment> showComment() {
 
-    }
-
-    @Override
-    public List<Article> loadArticles() {
         Connection connection = connect();
         Statement statement;
-        List<Article> articles = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>();
         try {
             statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM articles");
+            ResultSet rs = statement.executeQuery("SELECT * FROM comments");
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String title = rs.getString("title");
+                int idOfArticle = rs.getInt("idofarticle");
                 String content = rs.getString("content");
                 String author = rs.getString("author");
                 Date localDate = rs.getDate("localdate");
-                Article article = new Article(id, title, content, author, localDate.toLocalDate());
-                articles.add(article);
-
+                Comment comment = new Comment(id, idOfArticle, content, author, localDate.toLocalDate());
+                comments.add(comment);
             }
             statement.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return articles;
+        return comments;
     }
 
     @Override
-    public Article loadArticleById(int id) {
+    public List<Comment> commentsOfArticles(Article article) {
         Connection connection = connect();
         Statement statement;
+        List<Comment> comments = new ArrayList<>();
         try {
             statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM articles WHERE id=" + id);
+            ResultSet rs = statement.executeQuery("SELECT * FROM comments WHERE idofarticle=" + article.getId());
             while (rs.next()) {
-                String title = rs.getString("title");
+                int id = rs.getInt("id");
+                int idOfArticle = rs.getInt("idofarticle");
                 String content = rs.getString("content");
                 String author = rs.getString("author");
                 Date localDate = rs.getDate("localdate");
-                return new Article(id, title, content, author, localDate.toLocalDate());
+                Comment comment = new Comment(id, idOfArticle, content, author, localDate.toLocalDate());
+                comments.add(comment);
             }
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new ArticleNotFoundException(id);
+        return comments;
     }
 
     private Connection connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to Articles DataBase.");
+            System.out.println("Connected to Comment DataBase.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
