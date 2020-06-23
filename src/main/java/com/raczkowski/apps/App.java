@@ -43,7 +43,7 @@ public class App {
     private static void run() {
         ArticlesDao articlesDao = new ArticlesJDBCDao();
         CommentDao commentDao = new CommentsJDBCDao();
-        UsersCSVDao usersRepository = new UsersCSVDao("src/main/resources/Users.csv");
+        UsersDao usersDao = new UsersJDBCDao();
 
         new RegistrationController(
                 new RootController(
@@ -66,7 +66,7 @@ public class App {
                                 new Components(rootMenuComponents)
                         )),
                 new Components(registrationComponents),
-                new LogIn(usersRepository),
-                new Registration(usersRepository)).handle();
+                new LogIn(usersDao),
+                new Registration(usersDao)).handle();
     }
 }

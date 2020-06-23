@@ -36,22 +36,6 @@ public class User {
         return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public String toString() {
         return "Users { " +
