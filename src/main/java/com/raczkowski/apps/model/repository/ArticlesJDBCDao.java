@@ -4,14 +4,12 @@ import com.raczkowski.apps.model.Article;
 
 import java.sql.DriverManager;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 
 public class ArticlesJDBCDao implements ArticlesDao {
-    private final String url = "jdbc:postgresql://localhost:5432/articleservice";
-    private final String user = "postgres";
-    private final String password = "Tajfun";
 
     @Override
     public void addArticle(Article article) {
@@ -24,8 +22,10 @@ public class ArticlesJDBCDao implements ArticlesDao {
             preparedStatement.setString(4, article.getAuthor());
             preparedStatement.setDate(5, Date.valueOf(article.getLocalDate()));
             preparedStatement.executeUpdate();
+            System.out.println("Article Added");
         } catch (SQLException e) {
             System.out.println("Cannot insert Article");
+            System.out.println(e.getSQLState());
         }
     }
 
@@ -81,9 +81,25 @@ public class ArticlesJDBCDao implements ArticlesDao {
         throw new ArticleNotFoundException(id);
     }
 
+    @Override
+    public void removeArticle(int id) {
+        Connection connection = connect();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM articles WHERE id=" + id);
+            preparedStatement.executeUpdate();
+            System.out.println("Article Removed");
+        } catch (SQLException e) {
+            System.out.println("Cannot Remove Article");
+            System.out.println(e.getSQLState());
+        }
+    }
+
     private Connection connect() {
         Connection conn = null;
         try {
+            String url = "jdbc:postgresql://localhost:5432/articleservice";
+            String user = "postgres";
+            String password = "Tajfun";
             conn = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to Articles DataBase.");
         } catch (SQLException e) {

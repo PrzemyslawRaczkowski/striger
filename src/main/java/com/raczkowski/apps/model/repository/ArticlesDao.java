@@ -16,4 +16,5 @@ public interface ArticlesDao {
 
     Article loadArticleById(int id);
 
+    void removeArticle(int id);
 }

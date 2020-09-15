@@ -50,7 +50,7 @@ public class App {
                         new ArticlesController(
                                 articlesDao,
                                 commentDao,
-                                new ArticlesCreator(),
+                                new ArticlesCreator(usersDao,userLoginData),
                                 new ArticlesStatistics(articlesDao),
                                 new Menu(new Components(articlesMenuComponents)),
                                 new TablePrinter(),
@@ -62,9 +62,7 @@ public class App {
                                 new CommentCreator(),
                                 articlesDao,
                                 new TablePrinter()),
-                        new Menu(
-                                new Components(rootMenuComponents)
-                        )),
+                        new Menu(new Components(rootMenuComponents))),
                 new Components(registrationComponents),
                 new LogIn(usersDao),
                 new Registration(usersDao)).handle();

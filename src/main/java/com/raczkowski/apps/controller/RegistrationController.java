@@ -13,6 +13,7 @@ public class RegistrationController implements Controller {
     private final LogIn logIn;
     private final Registration registration;
 
+
     public RegistrationController(RootController rootController,
                                   View menu,
                                   LogIn logIn,

@@ -1,6 +1,8 @@
 package com.raczkowski.apps.model.repository;
 
+import com.raczkowski.apps.model.LoggedInUserData;
 import com.raczkowski.apps.model.User;
+import com.raczkowski.apps.model.UserLoginData;
 import com.raczkowski.apps.model.UserRegistrationData;
 
 import java.sql.*;
@@ -8,11 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersJDBCDao implements UsersDao {
-
-    private final String url = "jdbc:postgresql://localhost:5432/articleservice";
-    private final String user = "postgres";
-    private final String password = "Tajfun";
-
     @Override
     public void addUser(UserRegistrationData user) {
         Connection connection = connect();
@@ -54,9 +51,30 @@ public class UsersJDBCDao implements UsersDao {
         return users;
     }
 
+    public LoggedInUserData selectDataOfUser(UserLoginData userLoginData) {
+        Connection connection = connect();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT name, lastName FROM users WHERE email ="+ "'" + userLoginData.getEmail() + "'");
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String lastName = rs.getString("lastname");
+                System.out.println(name + " " + lastName);
+                return new LoggedInUserData(name, lastName);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private Connection connect() {
         Connection conn = null;
         try {
+            String url = "jdbc:postgresql://localhost:5432/articleservice";
+            String user = "postgres";
+            String password = "Tajfun";
             conn = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to Articles DataBase.");
         } catch (SQLException e) {

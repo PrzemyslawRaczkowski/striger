@@ -121,7 +121,7 @@ public class ArticlesController implements Controller {
                     tablePrinter.printArticle(articlesRepository.loadArticleById(Integer.parseInt(choice1)));
                     commentRepository.addComment(commentCreator.create(),
                             articlesRepository.loadArticleById(Integer.parseInt(choice1)));
-                    //System.out.println("Successfully added !");
+                    System.out.println("Successfully added !");
                     run = false;
                     break;
                 case "2":
